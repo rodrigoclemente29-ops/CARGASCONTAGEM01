@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gerenciamento de Cargas</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7f9;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            overflow-x: auto;
+        }
+        
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo {
+            width: 80px;
+            height: 80px;
+            background-color: #2c3e50;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin-right: 15px;
+            text-align: center;
+            padding: 5px;
+            font-size: 14px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .logo::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #3498db;
+        }
+        
+        .logo-text {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .logo-subtext {
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+        
+        .sao-pedro-logo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-right: 20px;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            padding: 10px 15px;
+            border-radius: 8px;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sao-pedro-logo h1 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            line-height: 1.2;
+            text-align: center;
+        }
+        
+        .sao-pedro-logo p {
+            margin: 3px 0 0 0;
+            font-size: 12px;
+            text-align: center;
+            color: #ecf0f1;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin: 0;
+        }
+        
+        h2 {
+            color: #3498db;
+            margin-top: 30px;
+        }
+        
+        .form-section {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .form-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-secondary {
+            background-color: #2ecc71;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #27ae60;
+        }
+        
+        .btn-danger {
+            background-color: #e74c3c;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        
+        .btn-export {
+            background-color: #9b59b6;
+        }
+        
+        .btn-export:hover {
+            background-color: #8e44ad;
+        }
+        
+        .btn-export-pptx {
+            background-color: #d35400;
+        }
+        
+        .btn-export-pptx:hover {
+            background-color: #e67e22;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #3498db;
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .actions button {
+            margin-top: 0;
+            padding: 8px 12px;
+            font-size: 14px;
+        }
+        
+        .summary {
+            background-color: #eaf6ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .summary-card {
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .summary-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin: 10px 0;
+        }
+        
+        .summary-label {
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-bottom: none;
+            border-radius: 5px 5px 0 0;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        
+        .tab.active {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .export-buttons {
+            margin: 20px 0;
+            display: flex;
+            gap: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .logo-container {
+                margin-bottom: 15px;
+                justify-content: center;
+            }
+            
+            .sao-pedro-logo {
+                margin: 0 0 15px 0;
+                width: 100%;
+            }
+            
+            .form-group {
+                min-width: 100%;
+            }
+            
+            input, select, button {
+                font-size: 14px;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .tab {
+                margin-right: 0;
+                border-radius: 5px;
+                margin-bottom: 5px;
+                border: 1px solid #ddd;
+            }
+            
+            .tab.active {
+                border-radius: 5px 5px 0 0;
+            }
+            
+            .export-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo-container">
+                <div class="sao-pedro-logo">
+                    <h1>CASA SÃO PEDRO</h1>
+                    <p>Casa reforma e construção</p>
+                </div>
+                <div class="logo">
+                    <div>SISTEMA</div>
+                    <div>CARGA</div>
+                </div>
+                <div>
+                    <div class="logo-text">Controle de Cargas</div>
+                    <div class="logo-subtext">Gerenciamento de Transportes</div>
+                </div>
+            </div>
+            <h1>Gestão de Cargas</h1>
+        </div>
+        
+        <div class="tabs">
+            <div class="tab active" data-tab="cargas">Registro de Cargas</div>
+            <div class="tab" data-tab="placas">Cadastro de Placas</div>
+            <div class="tab" data-tab="transportadoras">Cadastro de Transportadoras</div>
+            <div class="tab" data-tab="resumo">Resumo</div>
+        </div>
+        
+        <div class="tab-content active" id="cargas">
+            <div class="form-section">
+                <h2>Nova Carga</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="numero-carga">Número da Carga:</label>
+                        <input type="text" id="numero-carga" placeholder="Ex: CT-2023-001">
+                    </div>
+                    <div class="form-group">
+                        <label for="peso">Peso (kg):</label>
+                        <input type="number" id="peso" min="0" step="0.01" placeholder="Ex: 1000.50">
+                    </div>
+                    <div class="form-group">
+                        <label for="quantidade-notas">Quantidade de Notas:</label>
+                        <input type="number" id="quantidade-notas" min="1" placeholder="Ex: 5">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="placa">Placa do Veículo:</label>
+                        <select id="placa">
+                            <option value="">Selecione uma placa</option>
+                            <!-- As placas serão carregadas via JavaScript -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="transportadora">Transportadora Responsável:</label>
+                        <select id="transportadora">
+                            <option value="">Selecione uma transportadora</option>
+                            <!-- As transportadoras serão carregadas via JavaScript -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="data">Data:</label>
+                        <input type="date" id="data">
+                    </div>
+                </div>
+                
+                <button id="add-carga">Adicionar Carga</button>
+            </div>
+            
+            <h2>Cargas Registradas</h2>
+            <div class="export-buttons">
+                <button id="export-cargas" class="btn-export">Exportar para Excel</button>
+            </div>
+            <div style="overflow-x: auto;">
+                <table id="cargas-table">
+                    <thead>
+                        <tr>
+                            <th>Número da Carga</th>
+                            <th>Peso (kg)</th>
+                            <th>Qtd. Notas</th>
+                            <th>Placa</th>
+                            <th>Transportadora</th>
+                            <th>Data</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- As linhas serão adicionadas aqui via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="placas">
+            <div class="form-section">
+                <h2>Cadastro de Placas</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nova-placa">Nova Placa:</label>
+                        <input type="text" id="nova-placa" placeholder="Ex: ABC1D23" maxlength="7">
+                    </div>
+                    <div class="form-group">
+                        <label for="veiculo">Veículo:</label>
+                        <input type="text" id="veiculo" placeholder="Ex: Scania R500">
+                    </div>
+                    <div class="form-group">
+                        <label for="capacidade">Capacidade (kg):</label>
+                        <input type="number" id="capacidade" min="0" placeholder="Ex: 30000">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="motorista">Motorista Responsável:</label>
+                        <input type="text" id="motorista" placeholder="Ex: João Silva">
+                    </div>
+                </div>
+                <button id="add-placa">Cadastrar Placa</button>
+            </div>
+            
+            <h2>Placas Cadastradas</h2>
+            <div style="overflow-x: auto;">
+                <table id="placas-table">
+                    <thead>
+                        <tr>
+                            <th>Placa</th>
+                            <th>Veículo</th>
+                            <th>Capacidade (kg)</th>
+                            <th>Motorista</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- As linhas serão adicionadas aqui via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="transportadoras">
+            <div class="form-section">
+                <h2>Cadastro de Transportadoras</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nome-transportadora">Nome da Transportadora:</label>
+                        <input type="text" id="nome-transportadora" placeholder="Ex: Transportes ABC">
+                    </div>
+                    <div class="form-group">
+                        <label for="cnpj">CNPJ:</label>
+                        <input type="text" id="cnpj" placeholder="Ex: 12.345.678/0001-90">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="telefone">Telefone:</label>
+                        <input type="text" id="telefone" placeholder="Ex: (11) 99999-9999">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">E-mail:</label>
+                        <input type="email" id="email" placeholder="Ex: contato@transportesabc.com.br">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="responsavel">Responsável:</label>
+                        <input type="text" id="responsavel" placeholder="Ex: João Silva">
+                    </div>
+                </div>
+                
+                <button id="add-transportadora">Cadastrar Transportadora</button>
+            </div>
+            
+            <h2>Transportadoras Cadastradas</h2>
+            <div style="overflow-x: auto;">
+                <table id="transportadoras-table">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>CNPJ</th>
+                            <th>Telefone</th>
+                            <th>E-mail</th>
+                            <th>Responsável</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- As linhas serão adicionadas aqui via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="resumo">
+            <div class="summary">
+                <h2>Resumo Geral</h2>
+                <div class="export-buttons">
+                    <button id="export-resumo-excel" class="btn-export">Exportar Resumo para Excel</button>
+                    <button id="export-resumo-pptx" class="btn-export-pptx">Exportar Resumo para PowerPoint</button>
+                </div>
+                <div class="summary-grid">
+                    <div class="summary-card">
+                        <div class="summary-label">Total de Cargas</div>
+                        <div class="summary-value" id="total-cargas">0</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-label">Peso Total (kg)</div>
+                        <div class="summary-value" id="peso-total">0</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-label">Total de Notas</div>
+                        <div class="summary-value" id="total-notas">0</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-label">Placas Cadastradas</div>
+                        <div class="summary-value" id="total-placas">0</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-label">Transportadoras</div>
+                        <div class="summary-value" id="total-transportadoras">0</div>
+                    </div>
+                </div>
+            </div>
+            
+            <h2>Resumo por Transportadora</h2>
+            <div style="overflow-x: auto;">
+                <table id="resumo-transportadoras">
+                    <thead>
+                        <tr>
+                            <th>Transportadora</th>
+                            <th>Total de Cargas</th>
+                            <th>Peso Total (kg)</th>
+                            <th>Total de Notas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- As linhas serão adicionadas aqui via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <h2>Resumo por Placa</h2>
+            <div style="overflow-x: auto;">
+                <table id="resumo-placas">
+                    <thead>
+                        <tr>
+                            <th>Placa</th>
+                            <th>Total de Cargas</th>
+                            <th>Peso Total (kg)</th>
+                            <th>Total de Notas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- As linhas serão adicionadas aqui via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pptxgenjs/3.11.0/pptxgen.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elementos da interface
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const addCargaBtn = document.getElementById('add-carga');
+            const addPlacaBtn = document.getElementById('add-placa');
+            const addTransportadoraBtn = document.getElementById('add-transportadora');
+            const exportCargasBtn = document.getElementById('export-cargas');
+            const exportResumoExcelBtn = document.getElementById('export-resumo-excel');
+            const exportResumoPptxBtn = document.getElementById('export-resumo-pptx');
+            const cargasTable = document.querySelector('#cargas-table tbody');
+            const placasTable = document.querySelector('#placas-table tbody');
+            const transportadorasTable = document.querySelector('#transportadoras-table tbody');
+            const placaSelect = document.getElementById('placa');
+            const transportadoraSelect = document.getElementById('transportadora');
+            
+            // Dados
+            let cargas = [];
+            let placas = [];
+            let transportadoras = [];
+            
+            // Inicialização
+            loadData();
+            updatePlacaSelect();
+            updateTransportadoraSelect();
+            updateResumo();
+            
+            // Configuração das abas
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.getAttribute('data-tab');
+                    
+                    // Desativa todas as abas
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(tc => tc.classList.remove('active'));
+                    
+                    // Ativa a aba clicada
+                    tab.classList.add('active');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+            
+            // Adicionar carga
+            addCargaBtn.addEventListener('click', function() {
+                const numeroCarga = document.getElementById('numero-carga').value;
+                const peso = parseFloat(document.getElementById('peso').value);
+                const quantidadeNotas = parseInt(document.getElementById('quantidade-notas').value);
+                const placa = document.getElementById('placa').value;
+                const transportadoraId = document.getElementById('transportadora').value;
+                const data = document.getElementById('data').value;
+                
+                if (!numeroCarga || isNaN(peso) || isNaN(quantidadeNotas) || !placa || !transportadoraId || !data) {
+                    alert('Por favor, preencha todos os campos corretamente.');
+                    return;
+                }
+                
+                // Obter o nome da transportadora
+                const transportadoraObj = transportadoras.find(t => t.id == transportadoraId);
+                if (!transportadoraObj) {
+                    alert('Transportadora selecionada é inválida.');
+                    return;
+                }
+                
+                const carga = {
+                    id: Date.now(),
+                    numeroCarga,
+                    peso,
+                    quantidadeNotas,
+                    placa,
+                    transportadora: transportadoraObj.nome,
+                    transportadoraId: transportadoraObj.id,
+                    data
+                };
+                
+                cargas.push(carga);
+                addCargaToTable(carga);
+                updateResumo();
+                saveData();
+                
+                // Limpar formulário
+                document.getElementById('numero-carga').value = '';
+                document.getElementById('peso').value = '';
+                document.getElementById('quantidade-notas').value = '';
+            });
+            
+            // Adicionar placa
+            addPlacaBtn.addEventListener('click', function() {
+                const novaPlaca = document.getElementById('nova-placa').value.toUpperCase();
+                const veiculo = document.getElementById('veiculo').value;
+                const capacidade = parseInt(document.getElementById('capacidade').value);
+                const motorista = document.getElementById('motorista').value;
+                
+                if (!novaPlaca || novaPlaca.length !== 7) {
+                    alert('Por favor, informe uma placa válida (7 caracteres).');
+                    return;
+                }
+                
+                if (!veiculo || isNaN(capacidade) || !motorista) {
+                    alert('Por favor, preencha todos os campos corretamente.');
+                    return;
+                }
+                
+                // Verificar se a placa já existe
+                if (placas.some(p => p.placa === novaPlaca)) {
+                    alert('Esta placa já está cadastrada.');
+                    return;
+                }
+                
+                const placa = {
+                    id: Date.now(),
+                    placa: novaPlaca,
+                    veiculo,
+                    capacidade,
+                    motorista
+                };
+                
+                placas.push(placa);
+                addPlacaToTable(placa);
+                updatePlacaSelect();
+                updateResumo();
+                saveData();
+                
+                // Limpar formulário
+                document.getElementById('nova-placa').value = '';
+                document.getElementById('veiculo').value = '';
+                document.getElementById('capacidade').value = '';
+                document.getElementById('motorista').value = '';
+            });
+            
+            // Adicionar transportadora
+            addTransportadoraBtn.addEventListener('click', function() {
+                const nome = document.getElementById('nome-transportadora').value;
+                const cnpj = document.getElementById('cnpj').value;
+                const telefone = document.getElementById('telefone').value;
+                const email = document.getElementById('email').value;
+                const responsavel = document.getElementById('responsavel').value;
+                
+                if (!nome || !cnpj) {
+                    alert('Por favor, preencha pelo menos o nome e CNPJ da transportadora.');
+                    return;
+                }
+                
+                // Verificar se a transportadora já existe
+                if (transportadoras.some(t => t.cnpj === cnpj)) {
+                    alert('Já existe uma transportadora cadastrada com este CNPJ.');
+                    return;
+                }
+                
+                const transportadora = {
+                    id: Date.now(),
+                    nome,
+                    cnpj,
+                    telefone,
+                    email,
+                    responsavel
+                };
+                
+                transportadoras.push(transportadora);
+                addTransportadoraToTable(transportadora);
+                updateTransportadoraSelect();
+                updateResumo();
+                saveData();
+                
+                // Limpar formulário
+                document.getElementById('nome-transportadora').value = '';
+                document.getElementById('cnpj').value = '';
+                document.getElementById('telefone').value = '';
+                document.getElementById('email').value = '';
+                document.getElementById('responsavel').value = '';
+            });
+            
+            // Exportar cargas para Excel
+            exportCargasBtn.addEventListener('click', function() {
+                if (cargas.length === 0) {
+                    alert('Não há cargas para exportar.');
+                    return;
+                }
+                
+                // Preparar dados para exportação
+                const dadosExportacao = cargas.map(carga => ({
+                    'Número da Carga': carga.numeroCarga,
+                    'Peso (kg)': carga.peso,
+                    'Quantidade de Notas': carga.quantidadeNotas,
+                    'Placa': carga.placa,
+                    'Transportadora': carga.transportadora,
+                    'Data': formatDate(carga.data)
+                }));
+                
+                // Criar planilha
+                const worksheet = XLSX.utils.json_to_sheet(dadosExportacao);
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, 'Cargas');
+                
+                // Gerar arquivo e fazer download
+                XLSX.writeFile(workbook, 'cargas.xlsx');
+            });
+            
+            // Exportar resumo para Excel
+            exportResumoExcelBtn.addEventListener('click', function() {
+                if (cargas.length === 0) {
+                    alert('Não há dados para exportar.');
+                    return;
+                }
+                
+                // Criar uma nova pasta de trabalho
+                const workbook = XLSX.utils.book_new();
+                
+                // Dados do resumo geral
+                const resumoGeral = [
+                    ['Resumo Geral'],
+                    ['Total de Cargas', cargas.length],
+                    ['Peso Total (kg)', cargas.reduce((sum, c) => sum + c.peso, 0)],
+                    ['Total de Notas', cargas.reduce((sum, c) => sum + c.quantidadeNotas, 0)],
+                    ['Placas Cadastradas', placas.length],
+                    ['Transportadoras', transportadoras.length]
+                ];
+                
+                const resumoGeralWorksheet = XLSX.utils.aoa_to_sheet(resumoGeral);
+                XLSX.utils.book_append_sheet(workbook, resumoGeralWorksheet, 'Resumo Geral');
+                
+                // Dados do resumo por transportadora
+                const transportadorasResumo = {};
+                cargas.forEach(carga => {
+                    if (!transportadorasResumo[carga.transportadora]) {
+                        transportadorasResumo[carga.transportadora] = {
+                            totalCargas: 0,
+                            pesoTotal: 0,
+                            totalNotas: 0
+                        };
+                    }
+                    
+                    transportadorasResumo[carga.transportadora].totalCargas++;
+                    transportadorasResumo[carga.transportadora].pesoTotal += carga.peso;
+                    transportadorasResumo[carga.transportadora].totalNotas += carga.quantidadeNotas;
+                });
+                
+                const resumoTransportadoraData = [['Transportadora', 'Total de Cargas', 'Peso Total (kg)', 'Total de Notas']];
+                for (const [nome, dados] of Object.entries(transportadorasResumo)) {
+                    resumoTransportadoraData.push([nome, dados.totalCargas, dados.pesoTotal, dados.totalNotas]);
+                }
+                
+                const resumoTransportadoraWorksheet = XLSX.utils.aoa_to_sheet(resumoTransportadoraData);
+                XLSX.utils.book_append_sheet(workbook, resumoTransportadoraWorksheet, 'Resumo por Transportadora');
+                
+                // Dados do resumo por placa
+                const placasResumo = {};
+                cargas.forEach(carga => {
+                    if (!placasResumo[carga.placa]) {
+                        placasResumo[carga.placa] = {
+                            totalCargas: 0,
+                            pesoTotal: 0,
+                            totalNotas: 0
+                        };
+                    }
+                    
+                    placasResumo[carga.placa].totalCargas++;
+                    placasResumo[carga.placa].pesoTotal += carga.peso;
+                    placasResumo[carga.placa].totalNotas += carga.quantidadeNotas;
+                });
+                
+                const resumoPlacaData = [['Placa', 'Total de Cargas', 'Peso Total (kg)', 'Total de Notas']];
+                for (const [placa, dados] of Object.entries(placasResumo)) {
+                    resumoPlacaData.push([placa, dados.totalCargas, dados.pesoTotal, dados.totalNotas]);
+                }
+                
+                const resumoPlacaWorksheet = XLSX.utils.aoa_to_sheet(resumoPlacaData);
+                XLSX.utils.book_append_sheet(workbook, resumoPlacaWorksheet, 'Resumo por Placa');
+                
+                // Gerar arquivo e fazer download
+                XLSX.writeFile(workbook, 'resumo_cargas.xlsx');
+            });
+            
+            // Exportar resumo para PowerPoint
+            exportResumoPptxBtn.addEventListener('click', function() {
+                if (cargas.length === 0) {
+                    alert('Não há dados para exportar.');
+                    return;
+                }
+                
+                // Criar uma nova apresentação
+                const pptx = new PptxGenJS();
+                
+                // Slide 1: Título
+                const slide1 = pptx.addSlide();
+                slide1.addText('Resumo de Cargas - Casa São Pedro', {
+                    x: 0.5,
+                    y: 1.5,
+                    w: '90%',
+                    h: 1.5,
+                    fontSize: 24,
+                    bold: true,
+                    align: 'center',
+                    color: '2C3E50'
+                });
+                
+                slide1.addText(`Data: ${new Date().toLocaleDateString('pt-BR')}`, {
+                    x: 0.5,
+                    y: 3,
+                    w: '90%',
+                    h: 1,
+                    fontSize: 16,
+                    align: 'center',
+                    color: '7F8C8D'
+                });
+                
+                // Slide 2: Resumo Geral
+                const slide2 = pptx.addSlide();
+                slide2.addText('Resumo Geral', {
+                    x: 0.5,
+                    y: 0.5,
+                    w: '90%',
+                    h: 1,
+                    fontSize: 20,
+                    bold: true,
+                    color: '2C3E50'
+                });
+                
+                const totalCargas = cargas.length;
+                const pesoTotal = cargas.reduce((sum, c) => sum + c.peso, 0);
+                const totalNotas = cargas.reduce((sum, c) => sum + c.quantidadeNotas, 0);
+                
+                const resumoGeralData = [
+                    ['Métrica', 'Valor'],
+                    ['Total de Cargas', totalCargas],
+                    ['Peso Total (kg)', pesoTotal.toLocaleString('pt-BR')],
+                    ['Total de Notas', totalNotas],
+                    ['Placas Cadastradas', placas.length],
+                    ['Transportadoras', transportadoras.length]
+                ];
+                
+                slide2.addTable(resumoGeralData, {
+                    x: 0.5,
+                    y: 1.5,
+                    w: 9,
+                    colW: [4, 3],
+                    fontSize: 14,
+                    color: '2C3E50',
+                    border: {pt: 1, color: 'BDC3C7'}
+                });
+                
+                // Slide 3: Resumo por Transportadora
+                const slide3 = pptx.addSlide();
+                slide3.addText('Resumo por Transportadora', {
+                    x: 0.5,
+                    y: 0.5,
+                    w: '90%',
+                    h: 1,
+                    fontSize: 20,
+                    bold: true,
+                    color: '2C3E50'
+                });
+                
+                const transportadorasResumo = {};
+                cargas.forEach(carga => {
+                    if (!transportadorasResumo[carga.transportadora]) {
+                        transportadorasResumo[carga.transportadora] = {
+                            totalCargas: 0,
+                            pesoTotal: 0,
+                            totalNotas: 0
+                        };
+                    }
+                    
+                    transportadorasResumo[carga.transportadora].totalCargas++;
+                    transportadorasResumo[carga.transportadora].pesoTotal += carga.peso;
+                    transportadorasResumo[carga.transportadora].totalNotas += carga.quantidadeNotas;
+                });
+                
+                const resumoTransportadoraData = [['Transportadora', 'Cargas', 'Peso (kg)', 'Notas']];
+                for (const [nome, dados] of Object.entries(transportadorasResumo)) {
+                    resumoTransportadoraData.push([
+                        nome, 
+                        dados.totalCargas, 
+                        dados.pesoTotal.toLocaleString('pt-BR'), 
+                        dados.totalNotas
+                    ]);
+                }
+                
+                slide3.addTable(resumoTransportadoraData, {
+                    x: 0.5,
+                    y: 1.5,
+                    w: 9,
+                    colW: [3, 2, 2, 2],
+                    fontSize: 12,
+                    color: '2C3E50',
+                    border: {pt: 1, color: 'BDC3C7'}
+                });
+                
+                // Slide 4: Resumo por Placa
+                const slide4 = pptx.addSlide();
+                slide4.addText('Resumo por Placa', {
+                    x: 0.5,
+                    y: 0.5,
+                    w: '90%',
+                    h: 1,
+                    fontSize: 20,
+                    bold: true,
+                    color: '2C3E50'
+                });
+                
+                const placasResumo = {};
+                cargas.forEach(carga => {
+                    if (!placasResumo[carga.placa]) {
+                        placasResumo[carga.placa] = {
+                            totalCargas: 0,
+                            pesoTotal: 0,
+                            totalNotas: 0
+                        };
+                    }
+                    
+                    placasResumo[carga.placa].totalCargas++;
+                    placasResumo[carga.placa].pesoTotal += carga.peso;
+                    placasResumo[carga.placa].totalNotas += carga.quantidadeNotas;
+                });
+                
+                const resumoPlacaData = [['Placa', 'Cargas', 'Peso (kg)', 'Notas']];
+                for (const [placa, dados] of Object.entries(placasResumo)) {
+                    resumoPlacaData.push([
+                        placa, 
+                        dados.totalCargas, 
+                        dados.pesoTotal.toLocaleString('pt-BR'), 
+                        dados.totalNotas
+                    ]);
+                }
+                
+                slide4.addTable(resumoPlacaData, {
+                    x: 0.5,
+                    y: 1.5,
+                    w: 9,
+                    colW: [2, 2, 2, 2],
+                    fontSize: 12,
+                    color: '2C3E50',
+                    border: {pt: 1, color: 'BDC3C7'}
+                });
+                
+                // Gerar e baixar o arquivo
+                pptx.writeFile({fileName: 'Resumo_Cargas_Casa_Sao_Pedro.pptx'});
+            });
+            
+            // Funções para adicionar dados às tabelas
+            function addCargaToTable(carga) {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>${carga.numeroCarga}</td>
+                    <td>${carga.peso.toLocaleString('pt-BR')}</td>
+                    <td>${carga.quantidadeNotas}</td>
+                    <td>${carga.placa}</td>
+                    <td>${carga.transportadora}</td>
+                    <td>${formatDate(carga.data)}</td>
+                    <td class="actions">
+                        <button class="btn-danger" onclick="removeCarga(${carga.id})">Remover</button>
+                    </td>
+                `;
+                
+                cargasTable.appendChild(row);
+            }
+            
+            function addPlacaToTable(placa) {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>${placa.placa}</td>
+                    <td>${placa.veiculo}</td>
+                    <td>${placa.capacidade.toLocaleString('pt-BR')}</td>
+                    <td>${placa.motorista}</td>
+                    <td class="actions">
+                        <button class="btn-danger" onclick="removePlaca(${placa.id})">Remover</button>
+                    </td>
+                `;
+                
+                placasTable.appendChild(row);
+            }
+            
+            function addTransportadoraToTable(transportadora) {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>${transportadora.nome}</td>
+                    <td>${transportadora.cnpj}</td>
+                    <td>${transportadora.telefone}</td>
+                    <td>${transportadora.email}</td>
+                    <td>${transportadora.responsavel}</td>
+                    <td class="actions">
+                        <button class="btn-danger" onclick="removeTransportadora(${transportadora.id})">Remover</button>
+                    </td>
+                `;
+                
+                transportadorasTable.appendChild(row);
+            }
+            
+            // Funções para remover dados
+            window.removeCarga = function(id) {
+                if (confirm('Tem certeza que deseja remover esta carga?')) {
+                    cargas = cargas.filter(c => c.id !== id);
+                    saveData();
+                    refreshCargasTable();
+                    updateResumo();
+                }
+            };
+            
+            window.removePlaca = function(id) {
+                if (confirm('Tem certeza que deseja remover esta placa?')) {
+                    // Verificar se a placa está sendo usada em alguma carga
+                    const placaObj = placas.find(p => p.id === id);
+                    const placaUsada = cargas.some(c => c.placa === placaObj.placa);
+                    
+                    if (placaUsada) {
+                        alert('Esta placa está associada a uma carga e não pode ser removida.');
+                        return;
+                    }
+                    
+                    placas = placas.filter(p => p.id !== id);
+                    saveData();
+                    refreshPlacasTable();
+                    updatePlacaSelect();
+                    updateResumo();
+                }
+            };
+            
+            window.removeTransportadora = function(id) {
+                if (confirm('Tem certeza que deseja remover esta transportadora?')) {
+                    // Verificar se a transportadora está sendo usada em alguma carga
+                    const transportadoraUsada = cargas.some(c => c.transportadoraId === id);
+                    
+                    if (transportadoraUsada) {
+                        alert('Esta transportadora está associada a uma carga e não pode ser removida.');
+                        return;
+                    }
+                    
+                    transportadoras = transportadoras.filter(t => t.id !== id);
+                    saveData();
+                    refreshTransportadorasTable();
+                    updateTransportadoraSelect();
+                    updateResumo();
+                }
+            };
+            
+            // Atualizar select de placas
+            function updatePlacaSelect() {
+                placaSelect.innerHTML = '<option value="">Selecione uma placa</option>';
+                
+                placas.forEach(placa => {
+                    const option = document.createElement('option');
+                    option.value = placa.placa;
+                    option.textContent = `${placa.placa} - ${placa.motorista}`;
+                    placaSelect.appendChild(option);
+                });
+            }
+            
+            // Atualizar select de transportadoras
+            function updateTransportadoraSelect() {
+                transportadoraSelect.innerHTML = '<option value="">Selecione uma transportadora</option>';
+                
+                transportadoras.forEach(transportadora => {
+                    const option = document.createElement('option');
+                    option.value = transportadora.id;
+                    option.textContent = transportadora.nome;
+                    transportadoraSelect.appendChild(option);
+                });
+            }
+            
+            // Atualizar resumo
+            function updateResumo() {
+                // Totais gerais
+                document.getElementById('total-cargas').textContent = cargas.length;
+                document.getElementById('peso-total').textContent = cargas.reduce((sum, c) => sum + c.peso, 0).toLocaleString('pt-BR');
+                document.getElementById('total-notas').textContent = cargas.reduce((sum, c) => sum + c.quantidadeNotas, 0);
+                document.getElementById('total-placas').textContent = placas.length;
+                document.getElementById('total-transportadoras').textContent = transportadoras.length;
+                
+                // Resumo por transportadora
+                const transportadorasResumo = {};
+                cargas.forEach(carga => {
+                    if (!transportadorasResumo[carga.transportadora]) {
+                        transportadorasResumo[carga.transportadora] = {
+                            totalCargas: 0,
+                            pesoTotal: 0,
+                            totalNotas: 0
+                        };
+                    }
+                    
+                    transportadorasResumo[carga.transportadora].totalCargas++;
+                    transportadorasResumo[carga.transportadora].pesoTotal += carga.peso;
+                    transportadorasResumo[carga.transportadora].totalNotas += carga.quantidadeNotas;
+                });
+                
+                const resumoTransportadoras = document.querySelector('#resumo-transportadoras tbody');
+                resumoTransportadoras.innerHTML = '';
+                
+                for (const [nome, dados] of Object.entries(transportadorasResumo)) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${nome}</td>
+                        <td>${dados.totalCargas}</td>
+                        <td>${dados.pesoTotal.toLocaleString('pt-BR')}</td>
+                        <td>${dados.totalNotas}</td>
+                    `;
+                    resumoTransportadoras.appendChild(row);
+                }
+                
+                // Resumo por placa
+                const placasResumo = {};
+                cargas.forEach(carga => {
+                    if (!placasResumo[carga.placa]) {
+                        placasResumo[carga.placa] = {
+                            totalCargas: 0,
+                            pesoTotal: 0,
+                            totalNotas: 0
+                        };
+                    }
+                    
+                    placasResumo[carga.placa].totalCargas++;
+                    placasResumo[carga.placa].pesoTotal += carga.peso;
+                    placasResumo[carga.placa].totalNotas += carga.quantidadeNotas;
+                });
+                
+                const resumoPlacas = document.querySelector('#resumo-placas tbody');
+                resumoPlacas.innerHTML = '';
+                
+                for (const [placa, dados] of Object.entries(placasResumo)) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${placa}</td>
+                        <td>${dados.totalCargas}</td>
+                        <td>${dados.pesoTotal.toLocaleString('pt-BR')}</td>
+                        <td>${dados.totalNotas}</td>
+                    `;
+                    resumoPlacas.appendChild(row);
+                }
+            }
+            
+            // Atualizar tabelas
+            function refreshCargasTable() {
+                cargasTable.innerHTML = '';
+                cargas.forEach(addCargaToTable);
+            }
+            
+            function refreshPlacasTable() {
+                placasTable.innerHTML = '';
+                placas.forEach(addPlacaToTable);
+            }
+            
+            function refreshTransportadorasTable() {
+                transportadorasTable.innerHTML = '';
+                transportadoras.forEach(addTransportadoraToTable);
+            }
+            
+            // Formatar data
+            function formatDate(dateString) {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('pt-BR');
+            }
+            
+            // Salvar e carregar dados
+            function saveData() {
+                localStorage.setItem('cargas', JSON.stringify(cargas));
+                localStorage.setItem('placas', JSON.stringify(placas));
+                localStorage.setItem('transportadoras', JSON.stringify(transportadoras));
+            }
+            
+            function loadData() {
+                const cargasData = localStorage.getItem('cargas');
+                const placasData = localStorage.getItem('placas');
+                const transportadorasData = localStorage.getItem('transportadoras');
+                
+                if (cargasData) {
+                    cargas = JSON.parse(cargasData);
+                    refreshCargasTable();
+                }
+                
+                if (placasData) {
+                    placas = JSON.parse(placasData);
+                    // Garantir compatibilidade com dados antigos (sem motorista)
+                    placas.forEach(placa => {
+                        if (!placa.motorista) {
+                            placa.motorista = "Não informado";
+                        }
+                    });
+                    refreshPlacasTable();
+                }
+                
+                if (transportadorasData) {
+                    transportadoras = JSON.parse(transportadorasData);
+                    refreshTransportadorasTable();
+                }
+            }
+            
+            // Definir data atual como padrão
+            document.getElementById('data').valueAsDate = new Date();
+            
+            // Adicionar máscaras aos campos
+            document.getElementById('cnpj').addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 12) {
+                    value = value.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2}).*/, '$1.$2.$3/$4-$5');
+                } else if (value.length > 8) {
+                    value = value.replace(/^(\d{2})(\d{3})(\d{3})(\d{4}).*/, '$1.$2.$3/$4');
+                } else if (value.length > 5) {
+                    value = value.replace(/^(\d{2})(\d{3})(\d{3}).*/, '$1.$2.$3');
+                } else if (value.length > 2) {
+                    value = value.replace(/^(\d{2})(\d{3}).*/, '$1.$2');
+                }
+                e.target.value = value;
+            });
+            
+            document.getElementById('telefone').addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 10) {
+                    value = value.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3');
+                } else if (value.length > 6) {
+                    value = value.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
+                } else if (value.length > 2) {
+                    value = value.replace(/^(\d{2})(\d{0,5}).*/, '($1) $2');
+                } else if (value.length > 0) {
+                    value = value.replace(/^(\d{0,2}).*/, '($1');
+                }
+                e.target.value = value;
+            });
+        });
+    </script>
+</body>
+</html>
